@@ -1,0 +1,21 @@
+---
+# action.yml for the chickenandpork/synology-docker-kernel-action docker action
+name: 'Synology Docker Kernel Action'
+description: 'Exercise a basic Synology container action to streamline the build of a kernel module'
+inputs:
+  package-arch:  # The "Package Arch": Purley, Grantley, v1000, Broadwell, Denverton
+    description: 'The Synology Package Arch: Denverton, Broadwell, etc (case-insensitive)'
+    required: true
+    default: 'Denverton'
+  dsm-version:  # The version of the target DSM. ie: 7.2, 7.1
+    description: 'The version of the target DSM (Major/Minor).  ie: 7.2, 7.1'
+    required: true
+    default: '7.2'
+outputs:
+  time:  # time build completed
+    description: 'The time the build completed'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.package-arch }}
