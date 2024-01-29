@@ -54,7 +54,7 @@ stubbed_version_resolver() {
     # $2 == Version
     # $3 == Victim array to be populated
     local -n res=$3
-    
+
     DL_BASE="https://global.synologydownload.com/download/ToolChain"
     case ${1} in
         denverton) ;;
@@ -127,11 +127,11 @@ merge() {
     local -n t=$1
 
     ls -al /synobuild/usr/local/${t[4]}/scripts/kconfig/
-    
+
     cat ${localconfig} >>/synobuild/localconfig
     # https://stackoverflow.com/a/39440863 <== merge_config
 
-    # not setting (yet): KBUILD_BUILD_HOST 
+    # not setting (yet): KBUILD_BUILD_HOST
     # not setting (yet): KBUILD_BUILD_USER
     # not setting (yet): SOURCE_DATE_EPOCH
 
@@ -144,7 +144,7 @@ pack_modules() {
     local -n t=$1
 
     ls -al /synobuild/usr/local/${t[4]}/scripts/kconfig/
-    
+
     chroot /synobuild bash -c 'cd /usr/local/linux-* && ./scripts/kconfig/merge_config.sh synoconfigs/denverton /localconfig && make modules'
     echo "::endgroup::"
 }
