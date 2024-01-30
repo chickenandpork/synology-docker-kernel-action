@@ -9,7 +9,7 @@ A kernel-build silo for the 3-tarball-plus-linux Synology toolchain setup
 
 **defaults to 7.2**
 
-This is the DSM version of the Syno we're targetting, major/minor only.  For example, "7.2", "7.1"
+This is the DSM version of the Syno we're targeting, major/minor only.  For example, "7.2", "7.1"
 
 ### `package-arch`
 
