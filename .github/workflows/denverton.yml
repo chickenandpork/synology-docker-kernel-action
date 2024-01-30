@@ -14,12 +14,12 @@ jobs:
         id: build
         with:
           artifacts: net/ipv4/netfilter/ipt_REJECT.ko net/netfilter/xt_comment.ko
-          dsm-version: '7.2'
+          dsm-version: '7.2.1'
           module-deactivate: CONFIG_NFSD CONFIG_NFS_FS
           module-modularize: CONFIG_IP_NF_TARGET_REJECT CONFIG_NETFILTER_XT_MATCH_COMMENT
           package-arch: 'denverton'
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: denverton-7.2-modules
+          name: kmodules-denverton-7.2.1
           path: ${{ github.workspace }}/${{ steps.build.outputs.archive }}
