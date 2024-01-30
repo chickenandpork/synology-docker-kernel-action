@@ -3,6 +3,10 @@
 name: 'Synology Docker Kernel Action'
 description: 'Exercise a basic Synology container action to streamline the build of a kernel module'
 inputs:
+  artifacts:  # Kernel derived objects to export as artifacts in a tarball ${package-arch}-${dsm-version}.txz
+    description: 'Kernel derived objects to export as artifacts in a tarball ${package-arch}-${dsm-version}.txz; if ommitted, all .ko will be packaged'
+    required: false
+    default: '@'
   package-arch:  # The "Package Arch": Purley, Grantley, v1000, Broadwell, Denverton
     description: 'The Synology Package Arch: Denverton, Broadwell, etc (case-insensitive)'
     required: true
@@ -11,6 +15,14 @@ inputs:
     description: 'The version of the target DSM (Major/Minor).  ie: 7.2, 7.1'
     required: true
     default: '7.2'
+  module-deactivate:  # space-separated list of kconfig keys to deactivate
+    description: 'Space-separated list of kconfig items to deactivate.  ie: CONFIG_NFS CONFIG_SMB CONFIG_IPIP...'
+    required: false
+    default: '@'
+  module-modularize:  # space-separated list of kconfig keys to modularize
+    description: 'Space-separated list of kconfig items to modularize.  ie: CONFIG_NFS CONFIG_SMB CONFIG_IPIP...'
+    required: false
+    default: '@'
 outputs:
   time:  # time build completed
     description: 'The time the build completed'
@@ -18,4 +30,13 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
+    - -a
     - ${{ inputs.package-arch }}
+    - -m
+    - ${{ inputs.module-modularize }}
+    - -n
+    - "${{ inputs.module-deactivate }}"
+    - -t
+    - "${{ inputs.artifacts }}"
+    - -v
+    - ${{ inputs.dsm-version }}
