@@ -62,7 +62,14 @@ stubbed_version_resolver() {
     esac
 
     case ${2} in
-        7.2*)
+        7.2.1)
+            KERNEL_BASE="${DL_BASE}/Synology%20NAS%20GPL%20Source/7.2.1-69057-4/${1}/linux-4.4.x.txz"
+            BASE="${DL_BASE}/toolkit/${2}/base/base_env-${2}.txz"
+            DEV="${DL_BASE}/toolkit/${2}/${1}/ds.denverton-${2}.dev.txz"
+            ENV="${DL_BASE}/toolkit/${2}/${1}/ds.denverton-${2}.env.txz"
+            KSUBDIR="linux-4.4.x"
+            ;;
+        7.2)
             KERNEL_BASE="${DL_BASE}/Synology%20NAS%20GPL%20Source/7.2-64570/${1}/linux-4.4.x.txz"
             BASE="${DL_BASE}/toolkit/${2}/base/base_env-${2}.txz"
             DEV="${DL_BASE}/toolkit/${2}/${1}/ds.denverton-${2}.dev.txz"

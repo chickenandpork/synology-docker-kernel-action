@@ -14,7 +14,7 @@ inputs:
   dsm-version:  # The version of the target DSM. ie: 7.2, 7.1
     description: 'The version of the target DSM (Major/Minor).  ie: 7.2, 7.1'
     required: true
-    default: '7.2'
+    default: '7.2.1'
   module-deactivate:  # space-separated list of kconfig keys to deactivate
     description: 'Space-separated list of kconfig items to deactivate.  ie: CONFIG_NFS CONFIG_SMB CONFIG_IPIP...'
     required: false
