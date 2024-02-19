@@ -17,8 +17,11 @@ words:
   - Broadwell
   - Denverton
   - Grantley
+  - NETFILTER
+  - NFSD
   - Purley
   - Syno
   - allanc
   - chickenandpork
   - kernelconfig
+  - netfilter
