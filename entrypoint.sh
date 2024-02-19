@@ -125,6 +125,7 @@ unpack() {
 merge() {
     echo "::group::Merging Config and Building"
     local -n t=$1
+    EXT=${2}
 
     ls -al /synobuild/usr/local/${t[4]}/scripts/kconfig/
 
@@ -134,6 +135,9 @@ merge() {
     # not setting (yet): KBUILD_BUILD_HOST
     # not setting (yet): KBUILD_BUILD_USER
     # not setting (yet): SOURCE_DATE_EPOCH
+
+    sed -ie "/^EXTRAVERSION =/ s/=.*\$/= ${EXT}/" /synobuild/usr/local/linux-4.4.x/Makefile
+    grep EXTRAVERSION /synobuild/usr/local/linux-4.4.x/Makefile
 
     chroot /synobuild bash -c 'cd /usr/local/linux-* && ./scripts/kconfig/merge_config.sh synoconfigs/denverton /localconfig && make modules'
     echo "::endgroup::"
@@ -177,7 +181,7 @@ stubbed_version_resolver "${PACKAGEARCH}" "${VERSION}" tarballs
 declare -p tarballs
 fetch tarballs
 unpack tarballs
-merge tarballs
+merge tarballs "+"
 manifest tarballs "${ARTIFACTS}"
 archive tarballs "/manifest" /github/workspace/${PACKAGEARCH}-${VERSION}.txz
 echo "archive=${PACKAGEARCH}-${VERSION}.txz" >> ${GITHUB_OUTPUT}
