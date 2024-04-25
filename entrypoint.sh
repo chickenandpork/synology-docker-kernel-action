@@ -11,7 +11,7 @@ while getopts "a:m:n:t:v:" o; do
             PACKAGEARCH=${OPTARG}
             ;;
         t)
-            ARTIFACTS=${OPTARG}
+            ARTIFACTS=".config ${OPTARG}"
             ;;
         m)  # make it a module
             for M in ${OPTARG}; do
@@ -139,7 +139,7 @@ merge() {
     sed -ie "/^EXTRAVERSION =/ s/=.*\$/= ${EXT}/" /synobuild/usr/local/linux-4.4.x/Makefile
     grep EXTRAVERSION /synobuild/usr/local/linux-4.4.x/Makefile
 
-    chroot /synobuild bash -c 'cd /usr/local/linux-* && ./scripts/kconfig/merge_config.sh synoconfigs/denverton /localconfig && make modules'
+    chroot /synobuild bash -c 'cd /usr/local/linux-* && ./scripts/kconfig/merge_config.sh synoconfigs/denverton /localconfig && find / -name \*config\* -print && make modules'
     echo "::endgroup::"
 }
 
