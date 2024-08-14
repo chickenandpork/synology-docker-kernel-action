@@ -8,7 +8,7 @@ inputs:
     required: false
     default: '@'
   package-arch:  # The "Package Arch": Purley, Grantley, v1000, Broadwell, Denverton
-    description: 'The Synology Package Arch: Denverton, Broadwell, etc (case-insensitive)'
+    description: 'The Synology Package Arch: Apollolake, Armada37xx, Broadwell, Broadwellnk, Broadwellnkv2, Broadwellntbap, Denverton, Geminilake, KVMCloud, KVMx64, Purley, r1000, rtd1296, v1000 (case-insensitive)'
     required: true
     default: 'Denverton'
   dsm-version:  # The version of the target DSM. ie: 7.2, 7.1

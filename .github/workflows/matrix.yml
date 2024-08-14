@@ -1,0 +1,38 @@
+---
+# yamllint disable-line rule:truthy
+on: [push]
+
+jobs:
+  architectures:
+    strategy:
+      matrix:
+        arch:
+          - Geminilake
+          - v1000
+        version: [ "7.2" ]
+    runs-on: ubuntu-latest
+    name: Build ${{ matrix.arch }}-${{ matrix.version }} kernel modules
+    steps:
+      - id: lowercase
+        run: |
+          echo "::set-output name=arch::${UPPERCASE_ARCH,,}"
+          echo "::set-output name=version::${UPPERCASE_VERSION,,}"
+        env:
+          UPPERCASE_ARCH: ${{ matrix.arch }}
+          UPPERCASE_VERSION: ${{ matrix.version }}
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Kernel configure and build
+        uses: ./  # Uses this repo action
+        id: build
+        with:
+          artifacts: net/ipv4/netfilter/ipt_REJECT.ko net/ipv4/netfilter/nf_reject_ipv4.ko net/netfilter/xt_comment.ko
+          dsm-version: ${{ steps.lowercase.outputs.version }}
+          module-deactivate: CONFIG_NFSD CONFIG_NFS_FS
+          module-modularize: CONFIG_IP_NF_TARGET_REJECT CONFIG_NETFILTER_XT_MATCH_COMMENT
+          package-arch: ${{ steps.lowercase.outputs.arch }}
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.lowercase.outputs.arch }}-${{ steps.lowercase.outputs.version }}-modules
+          path: ${{ github.workspace }}/${{ steps.build.outputs.archive }}
