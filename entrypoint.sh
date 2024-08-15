@@ -57,7 +57,20 @@ stubbed_version_resolver() {
 
     DL_BASE="https://global.synologydownload.com/download/ToolChain"
     case ${1} in
+        apollolake) ;;  # I personally test this arch
         denverton) ;;
+        v1000) ;;
+        broadwell) ;;
+        broadwellnk) ;;
+        broadwellnkv2) ;;
+        purley) ;;
+        kvmcloud) ;;
+        r1000) ;;
+        broadwellntbap) ;;
+        rtd1296) ;;
+        geminilake) ;;
+        kvmx64) ;;
+        armada37xx) ;;
         *) echo "Package Architecture ${1} not supported" 1>&2; return 1;;
     esac
 
@@ -65,8 +78,8 @@ stubbed_version_resolver() {
         7.2*)
             KERNEL_BASE="${DL_BASE}/Synology%20NAS%20GPL%20Source/7.2-64570/${1}/linux-4.4.x.txz"
             BASE="${DL_BASE}/toolkit/${2}/base/base_env-${2}.txz"
-            DEV="${DL_BASE}/toolkit/${2}/${1}/ds.denverton-${2}.dev.txz"
-            ENV="${DL_BASE}/toolkit/${2}/${1}/ds.denverton-${2}.env.txz"
+            DEV="${DL_BASE}/toolkit/${2}/${1}/ds.${1}-${2}.dev.txz"
+            ENV="${DL_BASE}/toolkit/${2}/${1}/ds.${1}-${2}.env.txz"
             KSUBDIR="linux-4.4.x"
             ;;
         *) echo "Kernel version ${2} not supported" 1>&2; return 1;;
@@ -126,6 +139,7 @@ merge() {
     echo "::group::Merging Config and Building"
     local -n t=$1
     EXT=${2}
+    ARCH=${3}
 
     ls -al /synobuild/usr/local/${t[4]}/scripts/kconfig/
 
@@ -139,17 +153,19 @@ merge() {
     sed -ie "/^EXTRAVERSION =/ s/=.*\$/= ${EXT}/" /synobuild/usr/local/linux-4.4.x/Makefile
     grep EXTRAVERSION /synobuild/usr/local/linux-4.4.x/Makefile
 
-    chroot /synobuild bash -c 'cd /usr/local/linux-* && ./scripts/kconfig/merge_config.sh synoconfigs/denverton /localconfig && find / -name \*config\* -print && make modules'
+    chroot /synobuild bash -c 'cd /usr/local/linux-* && ./scripts/kconfig/merge_config.sh synoconfigs/${ARCH} /localconfig && find / -name \*config\* -print && make modules'
     echo "::endgroup::"
 }
 
+# deadcode? TODO: prefix to obscure func name and ensure not called before deleting
 pack_modules() {
     echo "::group::Packing Modules"
     local -n t=$1
+    ARCH=${2}
 
     ls -al /synobuild/usr/local/${t[4]}/scripts/kconfig/
 
-    chroot /synobuild bash -c 'cd /usr/local/linux-* && ./scripts/kconfig/merge_config.sh synoconfigs/denverton /localconfig && make modules'
+    chroot /synobuild bash -c 'cd /usr/local/linux-* && ./scripts/kconfig/merge_config.sh synoconfigs/${ARCH} /localconfig && make modules'
     echo "::endgroup::"
 }
 
@@ -181,7 +197,7 @@ stubbed_version_resolver "${PACKAGEARCH}" "${VERSION}" tarballs
 declare -p tarballs
 fetch tarballs
 unpack tarballs
-merge tarballs "+"
+merge tarballs "+" "${PACKAGEARCH}"
 manifest tarballs "${ARTIFACTS}"
 archive tarballs "/manifest" /github/workspace/${PACKAGEARCH}-${VERSION}.txz
 echo "archive=${PACKAGEARCH}-${VERSION}.txz" >> ${GITHUB_OUTPUT}
