@@ -7,6 +7,7 @@ jobs:
     strategy:
       matrix:
         arch:
+          - Denverton
           - Geminilake
           - v1000
         version: [ "7.2" ]
