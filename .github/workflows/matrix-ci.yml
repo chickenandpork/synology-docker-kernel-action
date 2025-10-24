@@ -33,7 +33,7 @@ jobs:
           module-modularize: CONFIG_IP_NF_TARGET_REJECT CONFIG_NETFILTER_XT_MATCH_COMMENT
           package-arch: ${{ steps.lowercase.outputs.arch }}
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ steps.lowercase.outputs.arch }}-${{ steps.lowercase.outputs.version }}-modules
           path: ${{ github.workspace }}/${{ steps.build.outputs.archive }}
