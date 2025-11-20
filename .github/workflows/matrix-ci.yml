@@ -22,7 +22,7 @@ jobs:
           UPPERCASE_ARCH: ${{ matrix.arch }}
           UPPERCASE_VERSION: ${{ matrix.version }}
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Kernel configure and build
         uses: ./  # Uses this repo action
         id: build
